@@ -1,0 +1,79 @@
+{
+	"$schema": "https://json.schemastore.org/package",
+	"private": true,
+	"type": "module",
+	"version": "0.0.0",
+	"author": {
+		"name": "Mateusz Kadlubowski",
+		"email": "xeho91@pm.me",
+		"url": "https://xeho91.com"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"packageManager": "pnpm@8.10.5",
+	"scripts": {
+		"build": "turbo run build",
+		"build:lib": "turbo run build --filter \"@package/*\" ",
+		"clean": "turbo run clean",
+		"clean:cache": "del \"./node_modules/.cache\" \"./.turbo\"",
+		"db:start": "docker compose up",
+		"db:studio": "pnpm run --filter \"database\" db:studio",
+		"dev:lib": "turbo run dev:build --filter \"@package/*\"",
+		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
+		"eslint": "DEBUG=\"eslint:cli-engine\" eslint . --cache --cache-location \"./node_modules/.cache/eslint\" --ext .cjs,.js,.ts,.json,.yml,.yaml --ignore-pattern \"/apps/\" --ignore-pattern \"/packages/\" ",
+		"fix": "pnpm run \"/^fix:.*/\" ",
+		"fix:format": "pnpm prettier --write",
+		"fix:js": "pnpm eslint --fix",
+		"fix:md": "pnpm markdownlint --fix",
+		"fix:pkg": "syncpack format ; syncpack fix-mismatches",
+		"lint": "pnpm run \"/^lint:.*/\" ",
+		"lint:deps": "depcheck",
+		"lint:format": "pnpm prettier --check",
+		"lint:js": "pnpm eslint",
+		"lint:md": "pnpm markdownlint",
+		"lint:pkg": "syncpack list-mismatches",
+		"lint:staged": "lint-staged --verbose",
+		"markdownlint": "markdownlint . --dot --ignore-path \"./.gitignore\" --ignore \"./{apps,packages}/**/*\"",
+		"prepare": "husky install",
+		"prettier": "prettier --cache --cache-location=\"./node_modules/.cache/prettier\" --log-level=log \"./\" ",
+		"start:api": "pnpm run --filter \"api\" start:dev",
+		"supported": "browserslist",
+		"test": "vitest run --passWithNoTests"
+	},
+	"dependencies": {
+		"zod": "3.22.4"
+	},
+	"optionalDependencies": {
+		"@terminal-nerds/browserslist-config": "0.4.1",
+		"@terminal-nerds/eslint-config": "0.29.0",
+		"@terminal-nerds/lint-staged-config": "0.9.0",
+		"@terminal-nerds/markdownlint-config": "0.14.0",
+		"@terminal-nerds/prettier-config": "0.17.0",
+		"@terminal-nerds/syncpack-config": "0.10.0",
+		"@terminal-nerds/vitest-config": "0.14.0",
+		"browserslist": "4.22.2",
+		"del-cli": "5.1.0",
+		"depcheck": "1.4.7",
+		"eslint": "8.56.0",
+		"eslint-plugin-drizzle": "0.2.3",
+		"husky": "8.0.3",
+		"lint-staged": "15.2.0",
+		"markdownlint-cli": "0.38.0",
+		"prettier": "3.1.1",
+		"syncpack": "12.2.0",
+		"tsx": "4.7.0",
+		"vite": "5.0.10",
+		"vite-tsconfig-paths": "4.2.3",
+		"vitest": "1.1.0"
+	},
+	"devDependencies": {
+		"@terminal-nerds/typescript-config": "0.10.1",
+		"@total-typescript/ts-reset": "0.5.1",
+		"@types/node": "20.10.6",
+		"tsc-alias": "1.8.8",
+		"type-fest": "4.9.0",
+		"typescript": "5.3.3",
+		"vite-node": "1.1.0"
+	}
+}

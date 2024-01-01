@@ -1,0 +1,28 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "@terminal-nerds/typescript-config/es-module",
+	"compilerOptions": {
+		"allowImportingTsExtensions": false,
+		"baseUrl": ".",
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		"incremental": true,
+		"noEmit": false,
+		"tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo"
+	},
+	"exclude": [
+		"**/coverage/",
+		"**/node_modules/",
+		"apps/*/bin/",
+		"packages/*/lib/"
+	],
+	"include": [
+		"apps/",
+		"packages/",
+		"types/*.d.ts",
+		"*.js",
+		"*.json",
+		"./*.ts"
+	]
+}

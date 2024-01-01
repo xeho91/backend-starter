@@ -1,0 +1,106 @@
+{
+	"$schema": "https://turborepo.org/schema.json",
+	"remoteCache": {
+		"signature": true
+	},
+	"pipeline": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["bin/**", "lib/**"],
+			"cache": true
+		},
+		"clean": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": false
+		},
+		"clean:build": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": false
+		},
+		"clean:cache": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": false
+		},
+		"dev": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": false,
+			"persistent": true
+		},
+		"dev:build": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": false,
+			"persistent": true
+		},
+		"dev:test": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": false,
+			"persistent": true
+		},
+		"fix": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"fix:format": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"fix:js": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"fix:md": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"fix:pkg": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"lint": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"lint:deps": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"lint:format": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"lint:js": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"lint:md": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"lint:types": {
+			"dependsOn": [],
+			"outputs": [],
+			"cache": true
+		},
+		"test": {
+			"dependsOn": [],
+			"outputs": ["coverage/**"],
+			"cache": true
+		}
+	}
+}

@@ -1,0 +1,5 @@
+# https://pnpm.io/pnpm-workspace_yaml
+---
+packages:
+    - "apps/*" # "Binary"
+    - "packages/*" # "Libraries" - support binaries and other libraries
