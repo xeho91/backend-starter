@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json.schemastore.org/package",
+	"private": true,
+	"type": "module",
+	"name": "@packages/logger",
+	"version": "0.1.0",
+	"engines": {
+		"node": ">=20"
+	},
+	"files": [
+		"/lib"
+	],
+	"exports": {
+		".": {
+			"types": "./lib/main.d.ts",
+			"import": "./lib/main.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc --build --verbose",
+		"clean": "pnpm run \"/^clean:.*/\" ",
+		"clean:build": "del \"./lib\"",
+		"clean:cache": "del \"./.turbo\" \"./node_modules/.cache\"",
+		"dev": "pnpm run \"/^dev:.*/\" ",
+		"dev:build": "pnpm build --watch",
+		"dev:test": "pnpm vitest watch --dir \"./src\" --passWithNoTests --typecheck --ui",
+		"eslint": "DEBUG=\"eslint:cli-engine\" eslint . --cache --cache-location \"./node_modules/.cache/eslint\" --ext .json,.ts ",
+		"fix": "pnpm run \"/^fix:.*/\" ",
+		"fix:format": "pnpm prettier --write",
+		"fix:js": "pnpm lint:js --fix",
+		"fix:md": "pnpm lint:md --fix",
+		"fix:pkg": "syncpack format ; syncpack fix-mismatches",
+		"lint": "pnpm run \"/^lint:.*/\" ",
+		"lint:deps": "depcheck",
+		"lint:format": "pnpm prettier --check",
+		"lint:js": "pnpm eslint",
+		"lint:md": "pnpm markdownlint",
+		"lint:types": "tsc --noEmit",
+		"markdownlint": "markdownlint . --config \"../../.markdownlint.json\" --dot --ignore-path \"../../.gitignore\"",
+		"prettier": "prettier --cache --cache-location=\"./node_modules/.cache/prettier\" --ignore-path=\"../../.gitignore\" --log-level=log \"./\"",
+		"test": "vitest run --dir \"./src\" --passWithNoTests --typecheck"
+	},
+	"dependencies": {
+		"pino": "8.16.2",
+		"pino-pretty": "10.3.1"
+	}
+}
