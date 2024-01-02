@@ -16,6 +16,9 @@
 			"path": "packages/logger"
 		},
 		{
+			"path": "packages/path"
+		},
+		{
 			"path": "packages/utils"
 		}
 	]
