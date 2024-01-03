@@ -37,6 +37,7 @@
 		"markdownlint": "markdownlint . --dot --ignore-path \"./.gitignore\" --ignore \"./{apps,packages}/**/*\"",
 		"prepare": "husky install",
 		"prettier": "prettier --cache --cache-location=\"./node_modules/.cache/prettier\" --log-level=log \"./\" ",
+		"setup:env": "pnpm run --filter \"@packages/config\" setup:env",
 		"start:api": "pnpm run --filter \"api\" start:dev",
 		"supported": "browserslist",
 		"test": "vitest run --passWithNoTests"

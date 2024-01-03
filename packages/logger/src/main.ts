@@ -3,13 +3,13 @@ import pretty from "pino-pretty";
 
 /** Available log levels enum */
 export const LOG_LEVELS = [
-	"trace",
-	"debug",
-	"info",
-	"warn",
-	"error",
-	"fatal",
 	"silent",
+	"fatal",
+	"error",
+	"warn",
+	"info",
+	"debug",
+	"trace",
 ] as const;
 
 /** @see {@link LOG_LEVELS} */

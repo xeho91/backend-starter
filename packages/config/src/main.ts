@@ -12,48 +12,53 @@ import { loadDotenv } from "./dotenv.js";
 convict.addFormat(validator.ipaddress);
 convict.addFormat(validator.url);
 
-export const ENVIRONMENTS = ["production", "development", "test"] as const;
+export const ENVIRONMENTS = ["development", "test", "production"] as const;
 export type Environment = (typeof ENVIRONMENTS)[number];
 
 export type Config = Awaited<ReturnType<typeof loadConfig>>;
+
+export const CONFIG_SCHEMA = convict({
+	debug: {
+		doc: "Enable debugging mode.",
+		format: Boolean,
+		default: false,
+		env: "DEBUG",
+		arg: "debug",
+	},
+
+	env: {
+		doc: "The project environment.",
+		format: ENVIRONMENTS,
+		default: "development",
+		env: "NODE_ENV",
+		arg: "env",
+	} as convict.SchemaObj<Environment>,
+
+	log: {
+		doc: "Log output level.",
+		format: LOG_LEVELS,
+		default: "silent",
+		env: "LOG",
+		arg: "log",
+	} as convict.SchemaObj<LogLevel>,
+
+
+});
 
 /** load the project configuration. */
 export async function loadConfig() {
 	await loadDotenv();
 
-	const config = convict({
-		debug: {
-			doc: "Enable debugging mode.",
-			format: Boolean,
-			default: false,
-			env: "DEBUG",
-			arg: "debug",
-		},
-
-		env: {
-			doc: "The project environment.",
-			format: ENVIRONMENTS,
-			default: "development",
-			env: "NODE_ENV",
-			arg: "env",
-		} as convict.SchemaObj<Environment>,
-
-		log: {
-			doc: "Log output level.",
-			format: LOG_LEVELS,
-			default: "silent",
-			env: "LOG",
-			arg: "log",
-		} as convict.SchemaObj<LogLevel>,
-	});
-
-	setLoggerLevel(config.get("log"));
+	setLoggerLevel(CONFIG_SCHEMA.get("log"));
 
 	log.trace(`Validating the project configuration...`);
-	config.validate({ allowed: "warn" });
-	log.debug({ config }, `✅ The project project configuration is valid`);
+	CONFIG_SCHEMA.validate({ allowed: "warn" });
+	log.debug(
+		{ config: CONFIG_SCHEMA },
+		`The project project configuration is valid`,
+	);
 
-	return config;
+	return CONFIG_SCHEMA;
 }
 
 /**
