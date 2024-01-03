@@ -4,30 +4,42 @@ Library packages.
 
 ```text
 .
-├── [1] core
-├── [2] database
-├── [3] logger
-├── [4] path
-└── [5] utils
+├── [1] config
+├── [2] core
+├── [3] database
+├── [4] logger
+├── [5] path
+└── [6] utils
 ```
 
 Legend:
 
--   `[1]` -> [Core](#core)
--   `[2]` -> [Database](#database)
--   `[3]` -> [Logger](#logger)
--   `[4]` -> [Path](#path)
--   `[4]` -> [Utilities](#utilities)
+-   `[1]` -> [Config](#config)
+-   `[2]` -> [Core](#core)
+-   `[3]` -> [Database](#database)
+-   `[4]` -> [Logger](#logger)
+-   `[5]` -> [Path](#path)
+-   `[6]` -> [Utilities](#utilities)
 
 ---
+
+## Config
+
+Focused on the project configuration.
+
+[Read more](./config/README.md)
 
 ## Core
 
 Structures to be used in the project.
 
+[Read more](./core/README.md)
+
 ## Database
 
 Dedicated to using the database in the project.
+
+[Read more](./database/README.md)
 
 ## Logger
 
@@ -44,3 +56,5 @@ Define the absolute paths for the project root and its packages.
 ## Utilities
 
 Reusable snippets to be used across project's packages.
+
+[Read more](./utils/README.md)
