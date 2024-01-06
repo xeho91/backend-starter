@@ -84,8 +84,8 @@ describe("Password", () => {
 				it(`encrypted password is a string with ${EncryptedPassword.LENGTH} characters length`, ({
 					expect,
 				}) => {
-					expect(encrypted.value).toBeTypeOf("string");
-					expect(encrypted.value).toHaveLength(
+					expect(encrypted.toString()).toBeTypeOf("string");
+					expect(encrypted.toString()).toHaveLength(
 						EncryptedPassword.LENGTH,
 					);
 				});
@@ -93,7 +93,7 @@ describe("Password", () => {
 				it(`encrypted password info includes bcrypt hashing algorithm identifier ("${EncryptedPassword.HASH_ALGORITHM_IDENTIFIER}") and the salt rounds (${EncryptedPassword.SALT_ROUNDS})`, ({
 					expect,
 				}) => {
-					expect(encrypted.value).toMatch(
+					expect(encrypted.toString()).toMatch(
 						new RegExp(
 							`^\\$${EncryptedPassword.HASH_ALGORITHM_IDENTIFIER}\\$${EncryptedPassword.SALT_ROUNDS}\\$+`,
 						),

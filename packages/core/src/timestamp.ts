@@ -1,4 +1,3 @@
-import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
 import { z } from "zod";
 
 export class Timestamp {
@@ -16,19 +15,17 @@ export class Timestamp {
 		return this.SCHEMA.transform((v) => new this(v)).or(z.instanceof(this));
 	}
 
-	/**
-	 * This helps to ensure every table in this project uses the same **timestamps**.
-	 */
-	public static PG_SCHEMAS = {
-		created_at: timestamp("created_at").notNull().defaultNow(),
-		// TODO: Implement auto-update, when available
-		// Reference: https://github.com/drizzle-team/drizzle-orm/issues/956#issuecomment-1732327425
-		updated_at: timestamp("updated_at").notNull().defaultNow(),
-	};
-
-	public value: Date;
+	protected value: Date;
 
 	constructor(value: Date | string) {
 		this.value = Timestamp.SCHEMA.parse(value);
+	}
+
+	public toString() {
+		return this.value.toString();
+	}
+
+	public valueOf() {
+		return this.value;
 	}
 }

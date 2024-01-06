@@ -2,7 +2,6 @@ import { faker } from "@faker-js/faker";
 import { log } from "@packages/logger";
 import { getRandomInteger } from "@packages/utils/random";
 import bcrypt from "bcrypt";
-import { varchar } from "drizzle-orm/pg-core/columns/varchar";
 import { z } from "zod";
 
 export class Password {
@@ -68,18 +67,13 @@ export class Password {
 		return this.#value;
 	}
 
-	/** Quickly hide the password. */
-	public hide() {
-		return "*".repeat(this.#value.length);
-	}
-
 	/**
 	 * Check if the password is a match with an encrypted one.
 	 * @param encrypted - encrypted password to compare with
 	 */
 	public async isMatch(encrypted: EncryptedPassword): Promise<boolean> {
 		try {
-			return await bcrypt.compare(this.#value, encrypted.value);
+			return await bcrypt.compare(this.#value, encrypted.toString());
 		} catch (error) {
 			log.fatal({ error }, "There was an issue with comparison!");
 			throw error;
@@ -92,6 +86,14 @@ export class Password {
 	 */
 	public async encrypt(): Promise<EncryptedPassword> {
 		return await EncryptedPassword.from(this);
+	}
+
+	public toString() {
+		return "*".repeat(this.#value.length);
+	}
+
+	public valueOf() {
+		return this.toString();
 	}
 }
 
@@ -120,8 +122,6 @@ export class EncryptedPassword {
 		.string()
 		.length(this.LENGTH)
 		.startsWith(`$${this.HASH_ALGORITHM_IDENTIFIER}$${this.SALT_ROUNDS}$`);
-	public static PG_SCHEMA = varchar("password", { length: this.LENGTH });
-
 	public static createSchema() {
 		return this.SCHEMA.transform((v) => new this(v)).or(z.instanceof(this));
 	}
@@ -151,7 +151,7 @@ export class EncryptedPassword {
 		}
 	}
 
-	public value: string;
+	protected value: string;
 
 	constructor(value: string) {
 		this.value = EncryptedPassword.SCHEMA.parse(value);
@@ -163,5 +163,13 @@ export class EncryptedPassword {
 	 */
 	public async isMatch(password: Password): Promise<boolean> {
 		return password.isMatch(this);
+	}
+
+	public toString() {
+		return this.value;
+	}
+
+	public valueOf() {
+		return this.value;
 	}
 }
