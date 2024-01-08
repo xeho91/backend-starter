@@ -23,7 +23,7 @@ export type WorkspacePackage = (typeof WORKSPACE_PACKAGES)[number];
  * Get the **absolute path** to the project's workspace targetted _package_ root directory.
  * @param name - workspace package to target
  */
-export async function getPackageRootPath<T extends WorkspacePackage>(name: T) {
+export async function findPackageRootPath<T extends WorkspacePackage>(name: T) {
 	const directory = "packages";
 	const result = path.join(
 		await findWorkspaceRootPath(),

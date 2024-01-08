@@ -19,7 +19,7 @@ export type WorkspaceApp = (typeof WORKSPACE_APPS)[number];
  * Get the **absolute path** to the project workspace targetted _app_ root directory.
  * @param name - workspace app to target
  */
-export async function getAppRootPath<T extends WorkspaceApp>(name: T) {
+export async function findAppRootPath<T extends WorkspaceApp>(name: T) {
 	const directory = "apps";
 	const result = path.join(
 		await findWorkspaceRootPath(),
