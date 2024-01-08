@@ -1,14 +1,12 @@
 /// <reference types="vitest" />
 
 import { WITH_COVERAGE_OPTIONS } from "@terminal-nerds/vitest-config";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { configDefaults, defineWorkspace } from "vitest/config";
 
 /** @see {@link https://vitest.dev/guide/workspace} */
 export default defineWorkspace([
 	"./apps/*",
 	{
-		plugins: [tsconfigPaths()],
 		test: {
 			...WITH_COVERAGE_OPTIONS,
 			environment: "node",
@@ -19,9 +17,9 @@ export default defineWorkspace([
 			],
 		},
 	},
+
 	"./packages/*",
 	{
-		plugins: [tsconfigPaths()],
 		test: {
 			...WITH_COVERAGE_OPTIONS,
 			environment: "node",
