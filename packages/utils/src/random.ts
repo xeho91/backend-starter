@@ -43,6 +43,10 @@ export function getRandomIndex(length: number) {
 	return getRandomInteger({ min: 0, max: length - 1 });
 }
 
+export function getRandomBoolean() {
+	return Boolean(getRandomInteger({ min: 0, max: 1 }));
+}
+
 export function getRandomItem<Type = unknown>(
 	array: Array<Type> | readonly Type[],
 ) {
