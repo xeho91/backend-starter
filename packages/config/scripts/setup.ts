@@ -3,188 +3,133 @@ import path from "node:path";
 
 import { log } from "@packages/logger";
 import { findWorkspaceRootPath } from "@packages/path";
+import { typedObjectKeys } from "@packages/utils/object";
 import Enquirer from "enquirer";
-import { z } from "zod";
+import {
+	ZodBoolean,
+	ZodDefault,
+	ZodEffects,
+	ZodEnum,
+	ZodNumber,
+	type ZodTypeAny,
+} from "zod";
 
-import { CONFIG_SCHEMA } from "../src/main.js";
+import { CONFIG_SCHEMA, type EnvironmentVariable } from "../src/main.js";
 
 const { prompt } = Enquirer;
+const WORKSPACE_ROOT = await findWorkspaceRootPath();
+const DOTENV_PATH = path.join(WORKSPACE_ROOT, ".env");
 
 async function main() {
-	const schema = CONFIG_SCHEMA.getSchema();
-	const questions: Array<Parameters<typeof prompt>[0]> = [];
-	const variables = getEnvironmentVariableNames(
-		schema as unknown as InternalSchema,
-	);
-
-	for (const [variable, schema] of variables) {
-		questions.push(setPrompt(variable, schema));
-	}
-	// @ts-ignore FIXME: No idea how to fix this typing issue for now
-	const answers = await prompt(questions);
-	const content: string = Object.entries(answers)
-		.map(([key, value]) => `${key}=${value}`)
+	const answers = await promptQuestions();
+	const content: string = [...answers.entries()]
+		.map(([key, value]) => `${key}="${value}"`)
 		.join("\n");
-	const workspaceRoot = await findWorkspaceRootPath();
-	const dotenvPath = path.join(workspaceRoot, ".env");
 
-	fs.writeFileSync(dotenvPath, content, { encoding: "utf8" });
+	fs.writeFileSync(DOTENV_PATH, content, { encoding: "utf8" });
 	log.info(
-		`Successfully saved environment variables in: file://${dotenvPath}`,
+		`Successfully saved environment variables in: file://${DOTENV_PATH}`,
 	);
 }
 
-const FORMAT_SCHEMA = z
-	.literal("boolean")
-	.or(z.literal("int"))
-	.or(z.literal("ipaddress"))
-	.or(z.literal("port"));
-const VARIABLE_SCHEMA = z.object({
-	doc: z.string(),
-	default: z.optional(z.boolean().or(z.number()).or(z.string())),
-	format: z.optional(FORMAT_SCHEMA.or(z.array(z.string()))),
-	env: z.optional(z.string()),
-});
-type VariableSchema = z.infer<typeof VARIABLE_SCHEMA>;
+async function promptQuestions() {
+	const answers: Map<EnvironmentVariable, string> = new Map();
 
-function setPrompt(
-	variable: string,
-	schema: VariableSchema,
-): Parameters<typeof prompt>[0] {
-	const { doc, format } = schema;
-	const name = variable;
-	const message = `${doc} ${variable}=`;
+	for (const [variable, options] of getPromptOptions().entries()) {
+		const answer: Record<keyof typeof CONFIG_SCHEMA, string> =
+			await prompt(options);
 
-	if (Array.isArray(format)) {
-		return {
-			type: "autocomplete",
-			name,
-			message,
-			initial: 0,
-			choices: format,
-		};
+		answers.set(variable, String(answer[variable]));
 	}
 
-	if (format === "boolean") {
-		return {
-			type: "confirm",
-			name,
-			message,
-			initial: schema.default,
-			validate(value) {
-				return z.boolean().safeParse(value).success;
-			},
-		};
+	return answers;
+}
+
+function getPromptOptions() {
+	const questions: Map<EnvironmentVariable, Parameters<typeof prompt>[0]> =
+		new Map();
+
+	for (const variable of typedObjectKeys(CONFIG_SCHEMA)) {
+		const schema = CONFIG_SCHEMA[variable];
+
+		questions.set(variable, {
+			...setPromptType(schema),
+			name: variable,
+			message: `(${schema.description}) ${variable}=`,
+			...setValidate(variable),
+		});
 	}
 
-	if (format === "ipaddress") {
-		return {
-			type: "input",
-			name,
-			message,
-			validate(value) {
-				return z
-					.string()
-					.ip({ version: "v4" })
-					.or(z.string().ip({ version: "v6" }))
-					.safeParse(value).success;
-			},
-			initial: schema.default,
-		};
-	}
+	return questions;
+}
 
-	if (format === "port") {
-		return {
-			type: "number",
-			name,
-			message,
-			initial: schema.default,
-			validate(value) {
-				return z.number().min(1024).max(65_535).safeParse(value)
-					.success;
-			},
-		};
-	}
-
-	if (format === "int") {
-		return {
-			type: "number",
-			name,
-			message,
-			initial: schema.default,
-			validate(value) {
-				return z.number().min(0).safeParse(value).success;
-			},
-		};
-	}
-
-	if (variable.includes("PASS")) {
-		return {
-			type: "password",
-			name,
-			message,
-			validate(value) {
-				return z.string().min(16).safeParse(value).success;
-			},
-		};
-	}
-
+function setValidate(variable: EnvironmentVariable) {
 	return {
-		type: "input",
-		name,
-		message,
-		initial: schema.default,
-		validate(value) {
-			return z.string().min(6).safeParse(value).success;
+		validate(value: unknown) {
+			const schema = CONFIG_SCHEMA[variable];
+			try {
+				return typeof value === "object" && value && "name" in value
+					? schema.safeParse(value["name"]).success
+					: schema.safeParse(value).success;
+			} catch {
+				return false;
+			}
 		},
 	};
 }
 
-function getEnvironmentVariableNames(schema: VariableSchema | InternalSchema) {
-	const variables: Map<string, VariableSchema> = new Map();
+function setPromptType(schema: (typeof CONFIG_SCHEMA)[EnvironmentVariable]) {
+	const initial = getDefaultValue(schema);
+	const z = getType(schema);
 
-	if (isInternalSchema(schema)) {
-		for (const [_name, propertySchema] of Object.entries(
-			schema._cvtProperties,
-		)) {
-			extendMap(variables, getEnvironmentVariableNames(propertySchema));
-		}
-	} else {
-		addVariableToMap(schema, variables);
+	if (z instanceof ZodEnum) {
+		return {
+			type: "autocomplete",
+			choices: Object.keys(z.Values),
+			initial: 0,
+		} as const;
 	}
 
-	return variables;
-}
-
-function extendMap<
-	L extends Map<unknown, unknown>,
-	R extends Map<unknown, unknown>,
->(left: L, right: R) {
-	for (const [key, value] of right) {
-		left.set(key, value);
+	if (z instanceof ZodBoolean) {
+		return {
+			type: "confirm",
+			...(initial !== undefined && { initial }),
+		} as const;
 	}
 
-	return left;
-}
-
-const NESTED_SCHEMA = z.object({
-	_cvtProperties: z.record(z.string(), VARIABLE_SCHEMA),
-});
-const INTERNAL_SCHEMA = z.object({
-	_cvtProperties: z.record(z.string(), VARIABLE_SCHEMA.or(NESTED_SCHEMA)),
-});
-type InternalSchema = z.infer<typeof INTERNAL_SCHEMA>;
-function isInternalSchema(schema: unknown): schema is InternalSchema {
-	return INTERNAL_SCHEMA.safeParse(schema).success;
-}
-
-function addVariableToMap(
-	schema: VariableSchema,
-	map: Map<string, VariableSchema>,
-) {
-	if ("env" in schema && typeof schema.env === "string" && schema.env) {
-		map.set(schema.env, schema);
+	if (z instanceof ZodNumber) {
+		return {
+			type: "number",
+			...(initial !== undefined && { initial }),
+		} as const;
 	}
+
+	if (
+		z instanceof ZodEffects &&
+		"transform" in z._def.effect &&
+		z._def.effect.transform.toString().includes("new Password")
+	) {
+		return {
+			type: "password",
+		} as const;
+	}
+
+	return {
+		type: "input",
+		...(initial !== undefined && { initial }),
+	} as const;
+}
+
+function getDefaultValue(schema: ZodTypeAny) {
+	if (schema instanceof ZodDefault) {
+		return schema._def.defaultValue();
+	}
+}
+
+function getType(schema: ZodTypeAny): unknown {
+	return schema._def?.typeName === "ZodDefault"
+		? getType(schema._def.innerType)
+		: schema;
 }
 
 log.info("Running a script to setup the dotenv at the root of workspace...");

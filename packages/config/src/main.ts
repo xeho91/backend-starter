@@ -1,76 +1,79 @@
-import {
-	log,
-	LOG_LEVELS,
-	type LogLevel,
-	setLoggerLevel,
-} from "@packages/logger";
-import convict from "convict";
-import validator from "convict-format-with-validator";
+import { Name } from "@packages/core/name";
+import { Password } from "@packages/core/password";
+import { log, LOG_LEVELS, setLoggerLevel } from "@packages/logger";
+import { parseEnv, type Schemas } from "znv";
+import { z } from "zod";
 
 import { loadDotenv } from "./dotenv.js";
-
-convict.addFormat(validator.ipaddress);
-convict.addFormat(validator.url);
 
 export const ENVIRONMENTS = ["development", "test", "production"] as const;
 export type Environment = (typeof ENVIRONMENTS)[number];
 
-export type Config = Awaited<ReturnType<typeof loadConfig>>;
+/** @see {@link CONFIG_SCHEMA} */
+export type EnvironmentVariable = keyof typeof CONFIG_SCHEMA;
 
-export const CONFIG_SCHEMA = convict({
-	debug: {
-		doc: "Enable debugging mode.",
-		format: Boolean,
-		default: false,
-		env: "DEBUG",
-		arg: "debug",
-	},
+export const CONFIG_SCHEMA = {
+	// General
+	DEBUG: z
+		.boolean({
+			description: "Enable debugging mode.",
+		})
+		.default(false),
 
-	env: {
-		doc: "The project environment.",
-		format: ENVIRONMENTS,
-		default: "development",
-		env: "NODE_ENV",
-		arg: "env",
-	} as convict.SchemaObj<Environment>,
+	LOG: z
+		.enum(LOG_LEVELS, {
+			description: "Log output level.",
+			invalid_type_error: "Kurwa",
+		})
+		.default("silent"),
 
-	log: {
-		doc: "Log output level.",
-		format: LOG_LEVELS,
-		default: "silent",
-		env: "LOG",
-		arg: "log",
-	} as convict.SchemaObj<LogLevel>,
+	NODE_ENV: z
+		.enum(ENVIRONMENTS, { description: "The project environment." })
+		.default("development"),
 
+	// Database
+	DB_USER: z
+		.string({
+			description: "Database user for authentication.",
+		})
+		.transform((v) => new Name(v)),
+	DB_PASSWORD: z
+		.string({
+			description: "Database password for authentication.",
+		})
+		.transform((v) => new Password(v)),
+	DB_HOSTNAME: z
+		.string({
+			description: "Database hostname.",
+		})
+		.ip({ version: "v4" })
+		.default("0.0.0.0"),
+	DB_PORT: z
+		.number({ coerce: true, description: "Database port to listen." })
+		.min(1024)
+		.max(65_535)
+		.default(5432),
+	DB_NAME: z
+		.string({
+			description: "Database name.",
+		})
+		.default("sample")
+		.transform((v) => new Name(v)),
+} satisfies Schemas;
 
-});
+export type Config = ReturnType<typeof parseEnv<typeof CONFIG_SCHEMA>>;
 
 /** load the project configuration. */
-export async function loadConfig() {
+export async function loadConfig(): Promise<Config> {
 	await loadDotenv();
 
-	setLoggerLevel(CONFIG_SCHEMA.get("log"));
-
-	log.trace(`Validating the project configuration...`);
-	CONFIG_SCHEMA.validate({ allowed: "warn" });
-	log.debug(
-		{ config: CONFIG_SCHEMA },
-		`The project project configuration is valid`,
+	log.trace(
+		`Validating the project configuration via environment variables...`,
 	);
+	const config = parseEnv(process.env, CONFIG_SCHEMA);
 
-	return CONFIG_SCHEMA;
-}
+	setLoggerLevel(config.LOG);
 
-/**
- * Parse **security-sensitive** variable, don't let it be empty.
- * @param value - forwarded value
- */
-function parseSensitive(value: unknown) {
-	const stringified = String(value);
-
-	if (stringified) {
-		return stringified;
-	} else {
-		throw new Error("Empty string!");
-	}
+	log.debug({ config }, `The project project configuration is valid`);
+	return config;
 }

@@ -1,0 +1,5 @@
+{
+	"ignore-bin-package": false,
+	"ignores": ["vitest", "zod"],
+	"skip-missing": false
+}
