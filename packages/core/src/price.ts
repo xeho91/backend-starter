@@ -14,30 +14,56 @@ export class Price {
 	public static PRECISION = 19;
 	public static SCALE = 4;
 
-	public static SCHEMA = z.tuple([
-		z.number({ coerce: true }).min(this.MIN).max(this.MAX),
-		Currency.SCHEMA,
-	]);
+	private static NUMERIC_SCHEMA = z
+		.number({ coerce: true })
+		.min(this.MIN)
+		.max(this.MAX);
+	public static SCHEMA = z
+		.tuple([this.NUMERIC_SCHEMA, Currency.SCHEMA])
+		.or(this.NUMERIC_SCHEMA);
 
 	public static isValid(value: unknown): value is [number, CurrencyType] {
 		return this.SCHEMA.safeParse(value).success;
 	}
 
 	public static createSchema() {
-		return this.SCHEMA.transform((v) => new this(v)).or(z.instanceof(this));
+		return this.SCHEMA.transform((value) => {
+			if (Array.isArray(value)) {
+				const [price, currency] = value;
+
+				return new this(price, currency);
+			} else {
+				return new this(value);
+			}
+		}).or(z.instanceof(this));
 	}
 
 	public currency: Currency;
 	public value: number;
 
-	constructor(price: [number, CurrencyType]) {
-		const [value, currency] = Price.SCHEMA.parse(price);
+	constructor(price: number, currency: CurrencyType = Currency.DEFAULT) {
+		const parsed = Price.SCHEMA.parse([price, currency]);
 
-		this.value = value;
-		this.currency = new Currency(currency);
+		if (Array.isArray(parsed)) {
+			const [pPrice, pCurrency] = parsed;
+
+			this.value = pPrice;
+			this.currency = new Currency(pCurrency);
+		} else {
+			this.value = parsed;
+			this.currency = new Currency(currency);
+		}
 	}
 
 	public toString() {
-		return `${this.value} ${this.currency}`;
+		return this.value.toString();
+	}
+
+	public valueOf() {
+		return this.value;
+	}
+
+	get display() {
+		return `${this.currency} ${this.value}`;
 	}
 }

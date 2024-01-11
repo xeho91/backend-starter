@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export class Currency {
+	public static DEFAULT: CurrencyType = "TWD";
 	/** Available currencies in the project. */
 	public static ENUM = ["AUD", "EUR", "PLN", "TWD", "USD", "NZD"] as const;
 

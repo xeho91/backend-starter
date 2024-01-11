@@ -13,7 +13,8 @@
 	"exports": {
 		"./*": {
 			"types": "./lib/*.d.ts",
-			"import": "./lib/*.js"
+			"import": "./lib/*.js",
+			"require": "./lib/*.js"
 		}
 	},
 	"scripts": {

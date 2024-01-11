@@ -3,7 +3,7 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "lib/",
-		"tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo"
+		"rootDir": "src/"
 	},
 	"exclude": ["/src/**/*.test.ts"],
 	"include": ["src/"]
