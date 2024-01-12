@@ -3,9 +3,9 @@ import { describe, it } from "vitest";
 import { prettyJSON } from "./json.js";
 import {
 	getRandomInteger,
-	getRandomItem,
-	getRandomItems,
 	getRandomNumber,
+	pickRandomItem,
+	pickRandomItems,
 } from "./random.js";
 
 describe(`getRandomInteger(options?)`, () => {
@@ -81,17 +81,17 @@ describe(`getRandomNumber(options?)`, () => {
 
 const SAMPLE_ARRAY = [1337, "xeho91", true, 0, -1] as const;
 
-describe("getRandomItem(array)", () => {
-	const randomItem = getRandomItem(SAMPLE_ARRAY);
+describe("pickRandomItem(array)", () => {
+	const randomItem = pickRandomItem(SAMPLE_ARRAY);
 
 	it("Returns a random item from the provided array", ({ expect }) => {
 		expect(SAMPLE_ARRAY).toContain(randomItem);
 	});
 });
 
-describe("getRandomItems(array, options?)", () => {
+describe("pickRandomItems(array, options?)", () => {
 	const count = 3;
-	const items = getRandomItems(SAMPLE_ARRAY, { count });
+	const items = pickRandomItems(SAMPLE_ARRAY, { count });
 
 	it("returns an array of sample values picked from the provided array and count", ({
 		expect,

@@ -43,14 +43,18 @@ export function getRandomIndex(length: number) {
 	return getRandomInteger({ min: 0, max: length - 1 });
 }
 
-export function getRandomBoolean() {
-	return Boolean(getRandomInteger({ min: 0, max: 1 }));
+export function pickRandomItem<T>(array: readonly T[]) {
+	return array.at(getRandomIndex(array.length)) as T;
 }
 
-export function getRandomItem<Type = unknown>(
-	array: Array<Type> | readonly Type[],
+export function pickRandomEntry<Key, Value>(
+	collection: Map<Key, Value> | Set<Key>,
 ) {
-	return array.at(getRandomIndex(array.length)) as Type;
+	return [...collection.entries()].at(getRandomIndex(collection.size));
+}
+
+export function getRandomBoolean() {
+	return Boolean(getRandomInteger({ min: 0, max: 1 }));
 }
 
 interface GetRandomItemsOptions {
@@ -65,7 +69,7 @@ interface GetRandomItemsOptions {
  * @param array - array to get random items from
  * @param options - randomizing options
  */
-export function getRandomItems<Type = unknown>(
+export function pickRandomItems<Type = unknown>(
 	array: Array<Type> | readonly Type[],
 	options: GetRandomItemsOptions = {},
 ): Array<Type> {
@@ -73,7 +77,7 @@ export function getRandomItems<Type = unknown>(
 	const results: Array<Type> = [];
 
 	while (results.length < count) {
-		results.push(getRandomItem(array));
+		results.push(pickRandomItem(array));
 	}
 
 	return results;
