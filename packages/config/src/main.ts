@@ -61,7 +61,7 @@ export const CONFIG_SCHEMA = {
 		.transform((v) => new Name(v)),
 } satisfies Schemas;
 
-export type Config = ReturnType<typeof parseEnv<typeof CONFIG_SCHEMA>>;
+export type Config = z.infer<z.ZodObject<typeof CONFIG_SCHEMA>>;
 
 /** load the project configuration. */
 export async function loadConfig(): Promise<Config> {
@@ -75,5 +75,5 @@ export async function loadConfig(): Promise<Config> {
 	setLoggerLevel(config.LOG);
 
 	log.debug({ config }, `The project project configuration is valid`);
-	return config;
+	return config as Config;
 }

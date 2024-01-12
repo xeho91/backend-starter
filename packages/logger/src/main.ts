@@ -15,12 +15,9 @@ export const LOG_LEVELS = [
 /** @see {@link LOG_LEVELS} */
 export type LogLevel = (typeof LOG_LEVELS)[number];
 
-export const LOG_ENV_VAR_NAME = "LOG";
-export const LOG_DEFAULT_LEVEL = "silent" satisfies LogLevel;
-
 export const log = pino(
 	{
-		level: (process.env[LOG_ENV_VAR_NAME] || LOG_DEFAULT_LEVEL) as LogLevel,
+		level: (process.env["LOG"] || "silent") as LogLevel,
 	},
 	pretty({
 		colorize: true,

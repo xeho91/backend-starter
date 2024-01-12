@@ -13,7 +13,7 @@ export function getPostgresOptions(config: Config) {
 		getDatabaseURL(config);
 
 	return {
-		debug: ["trace", "debug"].includes(config.get("log")),
+		debug: ["trace", "debug"].includes(config.LOG),
 		user: username,
 		password,
 		hostname,
