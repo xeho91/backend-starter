@@ -17,7 +17,7 @@ export async function seedOrders() {
 	for (const customer of customers) {
 		const customer_id = customer.id;
 		const orders: Array<typeof TABLE_ORDER.$inferInsert> = Array.from(
-			{ length: getRandomInteger({ min: 5, max: 10 }) },
+			{ length: getRandomInteger({ min: 1, max: 5 }) },
 			(_value, _index) => {
 				return {
 					customer_id,

@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { UserRole } from "@packages/core/user-role";
 import { log } from "@packages/logger";
-import { getRandomItem } from "@packages/utils/random";
+import { pickRandomItem } from "@packages/utils/random";
 
 import { DB } from "../../query.js";
 import { TABLE_USER } from ".";
@@ -15,7 +15,7 @@ export async function seedUsers() {
 			return {
 				email: faker.internet.email(),
 				password: faker.internet.password(),
-				role: getRandomItem(UserRole.ENUM),
+				role: pickRandomItem(UserRole.ENUM),
 				created_at: faker.date.recent(),
 				updated_at: faker.date.future(),
 			};

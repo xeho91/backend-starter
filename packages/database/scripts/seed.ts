@@ -8,12 +8,9 @@ import { seedProductsOrders } from "../src/table/product-order/seed.js";
 import { seedUsers } from "../src/table/user/seed.js";
 
 async function seed() {
-	await Promise.all([
-		seedUsers(),
-		seedProducts(),
-		seedOrders(),
-		seedProductsOrders(),
-	]);
+	await Promise.all([seedUsers(), seedProducts()]);
+	await seedOrders();
+	await seedProductsOrders();
 }
 
 try {
