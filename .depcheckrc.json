@@ -1,18 +1,15 @@
 {
 	"ignore-bin-package": false,
 	"ignores": [
-		"@changesets/*",
 		"@terminal-nerds/*",
 		"@types/node",
 		"browserslist",
 		"depcheck",
 		"lint-staged",
-		"tsc-alias",
 		"tsx",
 		"turbo",
 		"type-fest",
 		"typescript",
-		"vite-node",
 		"zod"
 	],
 	"skip-missing": false
