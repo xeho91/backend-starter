@@ -27,6 +27,17 @@
 			"cache": false,
 			"persistent": true
 		},
+		"dev:docs": {
+			"dependsOn": ["^build"],
+			"outputs": ["docs/**"],
+			"cache": false,
+			"persistent": false
+		},
+		"docs": {
+			"dependsOn": ["^build"],
+			"outputs": ["docs/**"],
+			"cache": true
+		},
 		"fix": {
 			"dependsOn": [],
 			"outputs": [],

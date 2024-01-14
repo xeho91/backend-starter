@@ -13,11 +13,13 @@
 	"exports": {
 		".": {
 			"types": "./lib/main.d.ts",
-			"import": "./lib/main.js"
+			"import": "./lib/main.js",
+			"require": "./lib/main.js"
 		},
 		"./*": {
 			"types": "./lib/*.d.ts",
-			"import": "./lib/*.js"
+			"import": "./lib/*.js",
+			"require": "./lib/*.js"
 		}
 	},
 	"scripts": {
@@ -28,7 +30,9 @@
 		"clean:coverage": "del \"./coverage\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:build": "pnpm build --watch",
+		"dev:docs": "pnpm docs --watch",
 		"dev:test": "pnpm vitest watch --dir \"./src\" --passWithNoTests --typecheck --ui",
+		"docs": "typedoc",
 		"eslint": "DEBUG=\"eslint:cli-engine\" eslint . --cache --cache-location \"./node_modules/.cache/eslint\" --ext .json,.ts ",
 		"fix": "pnpm run \"/^fix:.*/\" ",
 		"fix:format": "pnpm prettier --write",

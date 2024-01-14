@@ -6,7 +6,7 @@
 	"author": {
 		"name": "Mateusz Kadlubowski",
 		"email": "xeho91@pm.me",
-		"url": "https://xeho91.com"
+		"url": "https://github.com/xeho91"
 	},
 	"engines": {
 		"node": ">=20"
@@ -22,8 +22,10 @@
 		"db:start": "pnpm run --filter database start",
 		"db:studio": "pnpm run --filter \"database\" studio",
 		"dev": "pnpm run \"/^dev:.*/\" ",
+		"dev:docs": "turbo run dev:docs",
 		"dev:lib": "turbo run dev:build --filter \"@packages/*\"",
 		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
+		"docs": "typedoc",
 		"eslint": "DEBUG=\"eslint:cli-engine\" eslint . --cache --cache-location \"./node_modules/.cache/eslint\" --ext .cjs,.js,.ts,.json,.yml,.yaml --ignore-pattern \"/apps/\" --ignore-pattern \"/packages/\" ",
 		"fix": "pnpm run \"/^fix:.*/\" ",
 		"fix:format": "pnpm prettier --write",
@@ -67,7 +69,12 @@
 		"prettier": "3.1.1",
 		"syncpack": "12.2.0",
 		"tsx": "4.7.0",
-		"turbo": "^1.11.3",
+		"turbo": "1.11.3",
+		"typedoc": "0.25.7",
+		"typedoc-plugin-coverage": "2.2.0",
+		"typedoc-plugin-markdown": "3.17.1",
+		"typedoc-plugin-mdn-links": "3.1.12",
+		"typedoc-plugin-zod": "1.1.2",
 		"vitest": "1.1.0"
 	},
 	"devDependencies": {
