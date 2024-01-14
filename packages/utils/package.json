@@ -21,6 +21,7 @@
 		"clean": "pnpm run \"/^clean:.*/\" ",
 		"clean:build": "del \"./lib\"",
 		"clean:cache": "del \"./.turbo\" \"./node_modules/.cache\"",
+		"clean:coverage": "del \"./coverage\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:build": "pnpm build --watch",
 		"dev:test": "pnpm vitest watch --dir \"./src\" --passWithNoTests --typecheck --ui",

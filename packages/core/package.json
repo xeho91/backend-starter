@@ -22,6 +22,7 @@
 		"clean": "pnpm run \"/^clean:.*/\" ",
 		"clean:build": "del \"./lib\"",
 		"clean:cache": "del \"./.turbo\" \"./node_modules/.cache\"",
+		"clean:coverage": "del \"./coverage\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:build": "pnpm build --watch",
 		"dev:test": "pnpm vitest watch --dir \"./src\" --passWithNoTests --typecheck --ui",
@@ -42,9 +43,9 @@
 		"test": "vitest run --dir \"./src\" --passWithNoTests --typecheck"
 	},
 	"dependencies": {
+		"@faker-js/faker": "8.3.1",
 		"@packages/logger": "workspace:*",
 		"@packages/utils": "workspace:*",
-		"@faker-js/faker": "8.3.1",
 		"bcrypt": "5.1.1"
 	},
 	"devDependencies": {

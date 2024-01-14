@@ -22,6 +22,8 @@
 		"clean": "pnpm run \"/^clean:.*/\" ",
 		"clean:build": "del \"./lib\"",
 		"clean:cache": "del \"./.turbo\" \"./node_modules/.cache\"",
+		"clean:coverage": "del \"./coverage\" ",
+		"clean:docker": "pnpm run stop && docker compose rm --force --volumes",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:build": "pnpm run build --watch",
 		"dev:test": "pnpm vitest watch --dir \"./src\" --passWithNoTests --ui",

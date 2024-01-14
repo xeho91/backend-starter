@@ -1,21 +1,15 @@
 {
+	"$schema": "https://json.schemastore.org/package",
+	"private": true,
+	"type": "module",
 	"name": "@packages/config",
 	"version": "0.1.0",
-	"$schema": "https://json.schemastore.org/package",
-	"dependencies": {
-		"@packages/core": "workspace:*",
-		"@packages/logger": "workspace:*",
-		"@packages/path": "workspace:*",
-		"@packages/utils": "workspace:*",
-		"dotenv": "16.3.1",
-		"znv": "0.4.0"
-	},
-	"devDependencies": {
-		"enquirer": "^2.4.1"
-	},
 	"engines": {
 		"node": ">=20"
 	},
+	"files": [
+		"/lib"
+	],
 	"exports": {
 		".": {
 			"types": "./lib/main.d.ts",
@@ -26,15 +20,12 @@
 			"import": "./lib/*.js"
 		}
 	},
-	"files": [
-		"/lib"
-	],
-	"private": true,
 	"scripts": {
 		"build": "tsc --project \"./tsconfig.build.json\" ",
 		"clean": "pnpm run \"/^clean:.*/\" ",
 		"clean:build": "del \"./lib\"",
 		"clean:cache": "del \"./.turbo\" \"./node_modules/.cache\"",
+		"clean:coverage": "del \"./coverage\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:build": "pnpm build --watch",
 		"dev:test": "pnpm vitest watch --dir \"./src\" --passWithNoTests --typecheck --ui",
@@ -55,5 +46,15 @@
 		"setup:env": "tsx \"./scripts/setup.ts\" ",
 		"test": "vitest run --dir \"./src\" --passWithNoTests --typecheck"
 	},
-	"type": "module"
+	"dependencies": {
+		"@packages/core": "workspace:*",
+		"@packages/logger": "workspace:*",
+		"@packages/path": "workspace:*",
+		"@packages/utils": "workspace:*",
+		"dotenv": "16.3.1",
+		"znv": "0.4.0"
+	},
+	"devDependencies": {
+		"enquirer": "^2.4.1"
+	}
 }

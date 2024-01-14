@@ -5,18 +5,19 @@ import { configDefaults, defineWorkspace } from "vitest/config";
 
 /** @see {@link https://vitest.dev/guide/workspace} */
 export default defineWorkspace([
-	"./apps/*",
-	{
-		test: {
-			...WITH_COVERAGE_OPTIONS,
-			environment: "node",
-			exclude: [
-				//
-				...configDefaults.exclude,
-				"**/dist/*",
-			],
-		},
-	},
+	// TODO: Uncomment when apps are ready
+	// "./apps/*",
+	// {
+	// 	test: {
+	// 		...WITH_COVERAGE_OPTIONS,
+	// 		environment: "node",
+	// 		exclude: [
+	// 			//
+	// 			...configDefaults.exclude,
+	// 			"**/dist/*",
+	// 		],
+	// 	},
+	// },
 
 	"./packages/*",
 	{

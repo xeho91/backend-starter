@@ -15,8 +15,10 @@
 	"scripts": {
 		"build": "turbo run build",
 		"build:lib": "turbo run build --filter \"@package/*\" ",
-		"clean": "turbo run clean",
+		"clean": "pnpm run \"/^clean:.*/\"",
 		"clean:cache": "del \"./node_modules/.cache\" \"./.turbo\"",
+		"clean:coverage": "del \"./coverage\" ",
+		"clean:packages": "pnpm run --parallel --recursive clean",
 		"db:start": "pnpm run --filter database start",
 		"db:studio": "pnpm run --filter \"database\" studio",
 		"dev:lib": "turbo run dev:build --filter \"@packages/*\"",
@@ -38,7 +40,6 @@
 		"prepare": "husky install",
 		"prettier": "prettier --cache --cache-location=\"./node_modules/.cache/prettier\" --log-level=log \"./\" ",
 		"setup:env": "pnpm run --filter \"@packages/config\" setup:env",
-		"start:api": "pnpm run --filter \"api\" start:dev",
 		"supported": "browserslist",
 		"test": "vitest run --passWithNoTests"
 	},
