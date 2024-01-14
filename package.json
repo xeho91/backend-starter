@@ -21,6 +21,7 @@
 		"clean:packages": "pnpm run --parallel --recursive clean",
 		"db:start": "pnpm run --filter database start",
 		"db:studio": "pnpm run --filter \"database\" studio",
+		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:lib": "turbo run dev:build --filter \"@packages/*\"",
 		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
 		"eslint": "DEBUG=\"eslint:cli-engine\" eslint . --cache --cache-location \"./node_modules/.cache/eslint\" --ext .cjs,.js,.ts,.json,.yml,.yaml --ignore-pattern \"/apps/\" --ignore-pattern \"/packages/\" ",
@@ -39,6 +40,7 @@
 		"markdownlint": "markdownlint . --dot --ignore-path \"./.gitignore\" --ignore \"./{apps,packages}/**/*\"",
 		"prepare": "husky install",
 		"prettier": "prettier --cache --cache-location=\"./node_modules/.cache/prettier\" --log-level=log \"./\" ",
+		"setup:db": "pnpm run --filter \"@packages/database\" setup:db",
 		"setup:env": "pnpm run --filter \"@packages/config\" setup:env",
 		"supported": "browserslist",
 		"test": "vitest run --passWithNoTests"

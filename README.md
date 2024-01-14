@@ -1,10 +1,17 @@
-# Back-end project template
+# Back-end starter
 
-A template to create a back-end project monorepo for the specific technology stack.
+A template to create a back-end project workspace _(a.k.a. "monorepo")_ for the specific technology stack.
+
+## Technology stack
+
+> [!CAUTION]
+> 🚧 Under construction
 
 ---
 
 ## Project structure
+
+Below is a quick navigation on how to navigate this project **directories**.
 
 ```text
 .
@@ -17,8 +24,8 @@ A template to create a back-end project monorepo for the specific technology sta
 Where as:
 
 -   `1` -> Git hooks used with [husky](https://github.com/typicode/husky)
--   `2` -> binary packages _(applications)_
--   `3` -> library packages
+-   `2` -> [binary packages _(applications)_](./apps/README.md)
+-   `3` -> [library packages](./packages/README.md)
 -   `4` -> types for the workspace
 
 ---
@@ -35,12 +42,27 @@ This section shows how to setup this project on your device.
 
 ### First steps
 
-1. Setup environment variables - there's a quick script to help yourself:
+1. Setup environment variables:
 
     ```sh
     pnpm setup:env
     ```
 
-1. Setup the database.
+    > ![INFO]
+    > Tthis is a custom script, which can be found in the
+    > [@packages/config/README.md](./packages/config/README.md#scripts).
 
-    The detailed instructions related to it can be found in the library package related to database - [@packages/database](./packages/database/README.md#getting-started).
+1. Build the packages _(both binaries and libraries)_:
+
+    ```sh
+    pnpm build
+    ```
+
+1. Setup the database:
+
+    ```sh
+    pnpm setup:db
+    ```
+
+    > ![INFO]
+    > The detailed instructions related to database can be found in the [@packages/database/README.md](./packages/database/README.md#getting-started).
