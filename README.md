@@ -33,7 +33,7 @@ Below is the list for the **shared dependencies** used in the project.
 
 ## Project structure
 
-Below is a quick navigation on how to navigate this project **directories**.
+Below is a quick navigation on how to navigate this project workspace root **directories**.
 
 ```text
 .
@@ -47,12 +47,12 @@ Below is a quick navigation on how to navigate this project **directories**.
 
 Where as:
 
--   `1` -> Git hooks used with [husky](https://github.com/typicode/husky)
--   `2` -> [binary packages _(applications)_](./apps/README.md)
--   `3` -> auto-generated _(by [Vitest])_ tests coverage _(ignored by default via `.gitignore`,)_
--   `4` -> auto-generated _(by [TypeDoc])_ documentation site _(ignored by default via `.gitignore`)_
--   `5` -> [library packages](./packages/README.md)
--   `6` -> types for the workspace
+-   [`[1] .husky`](./.husky/README.md) -> Git hooks setup for this project powered by [husky](https://github.com/typicode/husky)
+-   [`[2] apps`](/apps/README.md) -> binary packages _(applications)_
+-   `[3] coverage` -> auto-generated _(by [Vitest])_ tests coverage _(ignored by default via `.gitignore`)_
+-   `[4] docs` -> auto-generated _(by [TypeDoc])_ documentation site _(ignored by default via `.gitignore`)_
+-   [`[5] packages`](./packages/README.md) -> library packages
+-   [`[6] types`](./types/README.md) -> types for the workspace
 
 ---
 
@@ -80,10 +80,6 @@ This section shows how to setup this project on your device.
     pnpm setup:env
     ```
 
-    > ![INFO]
-    > This is a custom script, which can be found in the
-    > [@packages/config/README.md](./packages/config/README.md#scripts).
-
 1. Build the packages _(both binaries and libraries)_:
 
     ```sh
@@ -95,6 +91,3 @@ This section shows how to setup this project on your device.
     ```sh
     pnpm setup:db
     ```
-
-    > ![INFO]
-    > The detailed instructions related to database can be found in the [@packages/database/README.md](./packages/database/README.md#getting-started).
