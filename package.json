@@ -18,6 +18,7 @@
 		"clean": "pnpm run \"/^clean:.*/\"",
 		"clean:cache": "del \"./node_modules/.cache\" \"./.turbo\"",
 		"clean:coverage": "del \"./coverage\" ",
+		"clean:docs": "del \"./docs\"",
 		"clean:packages": "pnpm run --parallel --recursive clean",
 		"db:start": "pnpm run --filter database start",
 		"db:studio": "pnpm run --filter \"database\" studio",

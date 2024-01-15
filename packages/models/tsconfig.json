@@ -1,0 +1,19 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo"
+	},
+	"include": ["src/", "../../types/*.d.ts"],
+	"references": [
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../logger"
+		},
+		{
+			"path": "../utils"
+		}
+	]
+}
