@@ -106,15 +106,15 @@ importers:
 
   packages/config:
     dependencies:
-      '@packages/core':
-        specifier: workspace:*
-        version: link:../core
       '@packages/logger':
         specifier: workspace:*
         version: link:../logger
       '@packages/path':
         specifier: workspace:*
         version: link:../path
+      '@packages/units':
+        specifier: workspace:*
+        version: link:../units
       '@packages/utils':
         specifier: workspace:*
         version: link:../utils
@@ -126,42 +126,35 @@ importers:
         version: 0.4.0(zod@3.22.4)
     devDependencies:
       enquirer:
-        specifier: ^2.4.1
+        specifier: 2.4.1
         version: 2.4.1
 
   packages/core:
     dependencies:
-      '@faker-js/faker':
-        specifier: 8.3.1
-        version: 8.3.1
       '@packages/logger':
         specifier: workspace:*
         version: link:../logger
+      '@packages/units':
+        specifier: workspace:*
+        version: link:../units
       '@packages/utils':
         specifier: workspace:*
         version: link:../utils
-      bcrypt:
-        specifier: 5.1.1
-        version: 5.1.1
-    devDependencies:
-      '@types/bcrypt':
-        specifier: 5.0.2
-        version: 5.0.2
 
   packages/database:
     dependencies:
       '@packages/config':
         specifier: workspace:*
         version: link:../config
-      '@packages/core':
-        specifier: workspace:*
-        version: link:../core
       '@packages/logger':
         specifier: workspace:*
         version: link:../logger
       '@packages/path':
         specifier: workspace:*
         version: link:../path
+      '@packages/units':
+        specifier: workspace:*
+        version: link:../units
       '@packages/utils':
         specifier: workspace:*
         version: link:../utils
@@ -197,18 +190,6 @@ importers:
         specifier: 10.3.1
         version: 10.3.1
 
-  packages/models:
-    dependencies:
-      '@packages/core':
-        specifier: workspace:*
-        version: link:../core
-      '@packages/logger':
-        specifier: workspace:*
-        version: link:../logger
-      '@packages/utils':
-        specifier: workspace:*
-        version: link:../utils
-
   packages/path:
     dependencies:
       '@packages/logger':
@@ -217,6 +198,25 @@ importers:
       find-up:
         specifier: 7.0.0
         version: 7.0.0
+
+  packages/units:
+    dependencies:
+      '@faker-js/faker':
+        specifier: 8.3.1
+        version: 8.3.1
+      '@packages/logger':
+        specifier: workspace:*
+        version: link:../logger
+      '@packages/utils':
+        specifier: workspace:*
+        version: link:../utils
+      bcrypt:
+        specifier: 5.1.1
+        version: 5.1.1
+    devDependencies:
+      '@types/bcrypt':
+        specifier: 5.0.2
+        version: 5.0.2
 
   packages/utils:
     devDependencies:

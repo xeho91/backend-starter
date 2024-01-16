@@ -59,9 +59,9 @@
 	},
 	"dependencies": {
 		"@packages/config": "workspace:*",
-		"@packages/core": "workspace:*",
 		"@packages/logger": "workspace:*",
 		"@packages/path": "workspace:*",
+		"@packages/units": "workspace:*",
 		"@packages/utils": "workspace:*",
 		"drizzle-orm": "0.29.3",
 		"drizzle-zod": "0.5.1",

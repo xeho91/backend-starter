@@ -1,6 +1,9 @@
-import { UserRole, type UserRoleType } from "@packages/core/enums/user-role";
-import { Uuid } from "@packages/core/structs/uuid";
-import { Timestamp } from "@packages/core/timestamp";
+import {
+	UserRole,
+	type UserRoleType,
+} from "packages/units/lib/enums/user-role.js";
+import { Uuid } from "packages/units/lib/structs/uuid.js";
+import { Timestamp } from "packages/units/lib/timestamp.js";
 import { z } from "zod";
 
 import type { Serializeable } from "../types.d.ts";

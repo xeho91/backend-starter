@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-export class Timestamp {
+import type { Struct } from "./types.d.ts";
+
+export class Timestamp implements Struct<Date> {
 	public static SCHEMA = z.date({ coerce: true });
 
 	public static isValid(value: unknown): value is Date {

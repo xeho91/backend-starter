@@ -2,7 +2,7 @@
 	"$schema": "https://json.schemastore.org/package",
 	"private": true,
 	"type": "module",
-	"name": "@packages/models",
+	"name": "@packages/units",
 	"version": "0.1.0",
 	"engines": {
 		"node": ">=20"
@@ -45,8 +45,12 @@
 		"test": "vitest run --dir \"./src\" --passWithNoTests --typecheck"
 	},
 	"dependencies": {
-		"@packages/core": "workspace:*",
+		"@faker-js/faker": "8.3.1",
 		"@packages/logger": "workspace:*",
-		"@packages/utils": "workspace:*"
+		"@packages/utils": "workspace:*",
+		"bcrypt": "5.1.1"
+	},
+	"devDependencies": {
+		"@types/bcrypt": "5.0.2"
 	}
 }

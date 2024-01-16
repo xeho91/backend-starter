@@ -7,13 +7,13 @@
 	"include": ["scripts/", "src/", "../../types/*.d.ts"],
 	"references": [
 		{
-			"path": "../core"
-		},
-		{
 			"path": "../logger"
 		},
 		{
 			"path": "../path"
+		},
+		{
+			"path": "../units"
 		},
 		{
 			"path": "../utils"

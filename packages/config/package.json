@@ -49,14 +49,14 @@
 		"test": "vitest run --dir \"./src\" --passWithNoTests --typecheck"
 	},
 	"dependencies": {
-		"@packages/core": "workspace:*",
 		"@packages/logger": "workspace:*",
 		"@packages/path": "workspace:*",
+		"@packages/units": "workspace:*",
 		"@packages/utils": "workspace:*",
 		"dotenv": "16.3.1",
 		"znv": "0.4.0"
 	},
 	"devDependencies": {
-		"enquirer": "^2.4.1"
+		"enquirer": "2.4.1"
 	}
 }

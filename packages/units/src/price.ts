@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-import { Currency, type CurrencyType } from "./currency.js";
+import { Currency, type CurrencyType } from "./enums/currency.js";
+import type { Struct } from "./types.d.ts";
 
 /**
  * This class helps to ensure every table in this project uses the same **price** builder.
@@ -8,7 +9,7 @@ import { Currency, type CurrencyType } from "./currency.js";
  * For the choice of data type, see below reference:
  * https://stackoverflow.com/a/224866/6753652
  */
-export class Price {
+export class Price<C extends CurrencyType> implements Struct<number> {
 	public static MIN = 10;
 	public static MAX = 10_000_000;
 	public static PRECISION = 19;
@@ -19,7 +20,7 @@ export class Price {
 		.min(this.MIN)
 		.max(this.MAX);
 	public static SCHEMA = z
-		.tuple([this.NUMERIC_SCHEMA, Currency.SCHEMA])
+		.tuple([this.NUMERIC_SCHEMA, Currency.schema()])
 		.or(this.NUMERIC_SCHEMA);
 
 	public static isValid(value: unknown): value is [number, CurrencyType] {
@@ -38,7 +39,7 @@ export class Price {
 		}).or(z.instanceof(this));
 	}
 
-	public currency: Currency;
+	public currency: Currency<C>;
 	public value: number;
 
 	constructor(price: number, currency: CurrencyType = Currency.DEFAULT) {
@@ -48,11 +49,15 @@ export class Price {
 			const [pPrice, pCurrency] = parsed;
 
 			this.value = pPrice;
-			this.currency = new Currency(pCurrency);
+			this.currency = new Currency(pCurrency as C);
 		} else {
 			this.value = parsed;
-			this.currency = new Currency(currency);
+			this.currency = new Currency(currency as C);
 		}
+	}
+
+	get display() {
+		return `${this.currency} ${this.value}` as `${CurrencyType} ${number}`;
 	}
 
 	public toString() {
@@ -61,9 +66,5 @@ export class Price {
 
 	public valueOf() {
 		return this.value;
-	}
-
-	get display() {
-		return `${this.currency} ${this.value}`;
 	}
 }

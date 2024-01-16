@@ -1,12 +1,15 @@
-import { EncryptedPassword } from "@packages/core/encrypted-password";
-import { Password } from "@packages/core/password";
-import { Email, type StringifiedEmail } from "@packages/core/structs/email";
+import { Password } from "packages/units/lib/password.js";
+import {
+	Email,
+	type StringifiedEmail,
+} from "packages/units/lib/structs/email.js";
+import { EncryptedPassword } from "packages/units/src/encrypted-password.js";
 import { z } from "zod";
 
 import type { Serializeable } from "../types.d.ts";
 
 export type UserCredentialsType = z.infer<
-	ReturnType<(typeof UserCredentials)["schema"]>
+	ReturnType<(typeof UserCredentials)["extendedSchema"]>
 >;
 
 export class UserCredentials implements Serializeable<UserCredentialsType> {
@@ -14,7 +17,7 @@ export class UserCredentials implements Serializeable<UserCredentialsType> {
 		return z
 			.object({
 				email: Email.extendedSchema(),
-				password: EncryptedPassword.createSchema(),
+				password: EncryptedPassword.extendedSchema(),
 			})
 			.strict();
 	}
@@ -48,3 +51,8 @@ export class UserCredentials implements Serializeable<UserCredentialsType> {
 		};
 	}
 }
+
+const x = new UserCredentials({
+	email: "lol",
+	password: "lol",
+});

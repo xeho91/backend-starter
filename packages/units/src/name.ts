@@ -1,8 +1,10 @@
 import { z } from "zod";
 
-export class Name {
-	public static LENGTH_MIN = 1;
-	public static LENGTH_MAX = 255;
+import type { Struct } from "./types.d.ts";
+
+export class Name implements Struct<string> {
+	public static LENGTH_MIN = 1 as const;
+	public static LENGTH_MAX = 255 as const;
 
 	public static SCHEMA = z.string().min(this.LENGTH_MIN).max(this.LENGTH_MAX);
 

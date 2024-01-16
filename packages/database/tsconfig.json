@@ -10,13 +10,13 @@
 			"path": "../config"
 		},
 		{
-			"path": "../core"
-		},
-		{
 			"path": "../logger"
 		},
 		{
 			"path": "../path"
+		},
+		{
+			"path": "../units"
 		},
 		{
 			"path": "../utils"
