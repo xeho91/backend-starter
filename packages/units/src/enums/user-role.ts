@@ -2,11 +2,14 @@ import { z } from "zod";
 
 import type { Enum } from "../types.d.ts";
 
-export class UserRole<T extends UserRoleType = typeof UserRole.DEFAULT>
-	implements Enum<UserRoleType>
+export type UserRoleValue = (typeof UserRole)["ENUM"][number];
+export type UserRoleType = UserRoleValue | UserRole;
+
+export class UserRole<T extends UserRoleValue = typeof UserRole.DEFAULT>
+	implements Enum<UserRoleValue>
 {
 	/** Default value for this enum. */
-	public static DEFAULT = "standard" as const satisfies UserRoleType;
+	public static DEFAULT = "standard" as const satisfies UserRoleValue;
 
 	/** Available user roles in the project. */
 	public static ENUM = ["standard", "manager", "admin"] as const;
@@ -20,7 +23,7 @@ export class UserRole<T extends UserRoleType = typeof UserRole.DEFAULT>
 	 * Check if the provided value will be valid to create an instance.
 	 * @param value - base to create enum value from
 	 */
-	public static isValid(value: unknown): value is UserRoleType {
+	public static isValid(value: unknown): value is UserRoleValue {
 		return this.schema().safeParse(value).success;
 	}
 
@@ -31,19 +34,19 @@ export class UserRole<T extends UserRoleType = typeof UserRole.DEFAULT>
 			.or(z.instanceof(this));
 	}
 
-	#value: UserRoleType;
+	#value: UserRoleValue;
 
 	constructor(value: T = UserRole.DEFAULT as T) {
 		this.#value = UserRole.schema().parse(value) as T;
 	}
 
-	public is<R extends UserRoleType>(
+	public is<R extends UserRoleValue>(
 		role: R | UserRole<R>,
 	): this is UserRole<R> {
 		return this.#value === UserRole.extendedSchema().parse(role).#value;
 	}
 
-	public assign<N extends Exclude<UserRoleType, T>>(role: N) {
+	public assign<N extends Exclude<UserRoleValue, T>>(role: N) {
 		return new UserRole<N>(
 			UserRole.schema().exclude([this.#value]).parse(role),
 		);
@@ -57,5 +60,3 @@ export class UserRole<T extends UserRoleType = typeof UserRole.DEFAULT>
 		return this.#value;
 	}
 }
-
-export type UserRoleType = (typeof UserRole)["ENUM"][number];

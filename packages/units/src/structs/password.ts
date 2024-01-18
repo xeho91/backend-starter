@@ -2,7 +2,9 @@ import { faker } from "@faker-js/faker";
 import { getRandomInteger } from "@packages/utils/random";
 import { z } from "zod";
 
-import type { Struct } from "./types.d.ts";
+import type { Struct } from "../types.js";
+
+export type PasswordType = Password | string;
 
 export class Password implements Struct<string> {
 	/** @see {@link https://bitwarden.com/blog/how-long-should-my-password-be} */
@@ -37,7 +39,7 @@ export class Password implements Struct<string> {
 		return this.SCHEMA.safeParse(value).success;
 	}
 
-	public static createSchema() {
+	public static extendedSchema() {
 		return this.SCHEMA.transform((v) => new this(v)).or(z.instanceof(this));
 	}
 

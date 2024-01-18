@@ -9,6 +9,8 @@ type Value = [string, string, `4${string}`, string, string];
 export type StringifiedUuid = Join<Value, "-">;
 type Splitted = Split<StringifiedUuid, "-">;
 
+export type UuidType = StringifiedUuid | Uuid;
+
 export class Uuid implements Struct<StringifiedUuid> {
 	/** Zod default _(without transformation)_ schema, to parse **without** instance. */
 	public static schema() {
@@ -36,7 +38,7 @@ export class Uuid implements Struct<StringifiedUuid> {
 
 	#value: Value;
 
-	constructor(value: StringifiedUuid) {
+	constructor(value: StringifiedUuid | string) {
 		this.#value = Uuid.schema().parse(value).split("-") as Splitted;
 	}
 

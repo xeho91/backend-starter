@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { Currency, type CurrencyType } from "./enums/currency.js";
+import { Currency, type CurrencyValue } from "./enums/currency.js";
 import type { Struct } from "./types.d.ts";
 
 /**
@@ -9,7 +9,7 @@ import type { Struct } from "./types.d.ts";
  * For the choice of data type, see below reference:
  * https://stackoverflow.com/a/224866/6753652
  */
-export class Price<C extends CurrencyType> implements Struct<number> {
+export class Price<C extends CurrencyValue> implements Struct<number> {
 	public static MIN = 10;
 	public static MAX = 10_000_000;
 	public static PRECISION = 19;
@@ -23,11 +23,11 @@ export class Price<C extends CurrencyType> implements Struct<number> {
 		.tuple([this.NUMERIC_SCHEMA, Currency.schema()])
 		.or(this.NUMERIC_SCHEMA);
 
-	public static isValid(value: unknown): value is [number, CurrencyType] {
+	public static isValid(value: unknown): value is [number, CurrencyValue] {
 		return this.SCHEMA.safeParse(value).success;
 	}
 
-	public static createSchema() {
+	public static extendedSchema() {
 		return this.SCHEMA.transform((value) => {
 			if (Array.isArray(value)) {
 				const [price, currency] = value;
@@ -42,7 +42,7 @@ export class Price<C extends CurrencyType> implements Struct<number> {
 	public currency: Currency<C>;
 	public value: number;
 
-	constructor(price: number, currency: CurrencyType = Currency.DEFAULT) {
+	constructor(price: number, currency: CurrencyValue = Currency.DEFAULT) {
 		const parsed = Price.SCHEMA.parse([price, currency]);
 
 		if (Array.isArray(parsed)) {
@@ -57,7 +57,7 @@ export class Price<C extends CurrencyType> implements Struct<number> {
 	}
 
 	get display() {
-		return `${this.currency} ${this.value}` as `${CurrencyType} ${number}`;
+		return `${this.currency} ${this.value}` as `${CurrencyValue} ${number}`;
 	}
 
 	public toString() {

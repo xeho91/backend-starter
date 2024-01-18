@@ -2,7 +2,7 @@ import { excludeFromArray } from "@packages/utils/array";
 import { describe, it } from "vitest";
 import { ZodError } from "zod";
 
-import { UserRole, type UserRoleType } from "./user-role.js";
+import { UserRole, type UserRoleValue } from "./user-role.js";
 
 describe("UserRole", () => {
 	describe("is(role)", () => {
@@ -16,7 +16,7 @@ describe("UserRole", () => {
 	});
 
 	describe("success when provided role is included in the enum and:", () => {
-		const current = "standard" satisfies UserRoleType;
+		const current = "standard" satisfies UserRoleValue;
 		const instance = new UserRole(current);
 
 		it("returns false when is not the same", ({ expect }) => {
@@ -42,7 +42,7 @@ describe("UserRole", () => {
 		it("success when provided role is NOT same as the current one", ({
 			expect,
 		}) => {
-			const current = "standard" satisfies UserRoleType;
+			const current = "standard" satisfies UserRoleValue;
 			const instance = new UserRole(current);
 
 			for (const role of excludeFromArray(UserRole.ENUM, [current])) {

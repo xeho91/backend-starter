@@ -2,7 +2,7 @@ import { excludeFromArray } from "@packages/utils/array";
 import { describe, it } from "vitest";
 import { ZodError } from "zod";
 
-import { Currency, type CurrencyType } from "./currency.js";
+import { Currency, type CurrencyValue } from "./currency.js";
 
 describe("Currency", () => {
 	describe("is(currency)", () => {
@@ -41,7 +41,7 @@ describe("Currency", () => {
 		it("success when provided currency is NOT same as the current one", ({
 			expect,
 		}) => {
-			const current = "AUD" as const satisfies CurrencyType;
+			const current = "AUD" as const satisfies CurrencyValue;
 			const instance = new Currency(current);
 
 			for (const currency of excludeFromArray(Currency.ENUM, [current])) {

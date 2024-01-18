@@ -2,13 +2,17 @@ import { log } from "@packages/logger";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 
+import type { Struct } from "../types.js";
 import type { Password } from "./password.js";
-import type { Struct } from "./types.d.ts";
 
-type Value =
+export type StringifiedEncryptedPassword =
 	`${(typeof EncryptedPassword)["HASH_ALGORITHM_IDENTIFIER"]}$${(typeof EncryptedPassword)["SALT_ROUNDS"]}$${string}`;
 
-export class EncryptedPassword implements Struct<Value> {
+export type EncryptedPasswordType =
+	| StringifiedEncryptedPassword
+	| EncryptedPassword;
+
+export class EncryptedPassword implements Struct<StringifiedEncryptedPassword> {
 	/**
 	 * Length of the hashed password.
 	 * @see {@link https://blog.logrocket.com/password-hashing-node-js-bcrypt#node-js-bcyrpt-password-hashing-information}
@@ -29,20 +33,29 @@ export class EncryptedPassword implements Struct<Value> {
 	public static HASH_ALGORITHM_IDENTIFIER = "2b" as const;
 
 	/** Schema for the _(powered by `zod`)_ encrypted password, to ensure that encryption worked as expected. */
-	public static SCHEMA = z
-		.string()
-		.length(this.LENGTH)
-		.startsWith(`$${this.HASH_ALGORITHM_IDENTIFIER}$${this.SALT_ROUNDS}$`);
+	public static schema() {
+		return z
+			.string()
+			.length(this.LENGTH)
+			.startsWith(
+				`$${this.HASH_ALGORITHM_IDENTIFIER}$${this.SALT_ROUNDS}$`,
+			);
+	}
+
 	public static extendedSchema() {
-		return this.SCHEMA.transform((v) => new this(v)).or(z.instanceof(this));
+		return this.schema()
+			.transform((v) => new this(v))
+			.or(z.instanceof(this));
 	}
 
 	/**
 	 * Quickly check if the provided value meets encrypted the password schema.
 	 * @param value - the value to check
 	 */
-	public static isValid(value: unknown): value is Value {
-		return this.SCHEMA.safeParse(value).success;
+	public static isValid(
+		value: unknown,
+	): value is StringifiedEncryptedPassword {
+		return this.schema().safeParse(value).success;
 	}
 
 	/**
@@ -62,10 +75,12 @@ export class EncryptedPassword implements Struct<Value> {
 		}
 	}
 
-	#value: Value;
+	#value: StringifiedEncryptedPassword;
 
-	constructor(value: Value | string) {
-		this.#value = EncryptedPassword.SCHEMA.parse(value) as Value;
+	constructor(value: StringifiedEncryptedPassword | string) {
+		this.#value = EncryptedPassword.schema().parse(
+			value,
+		) as StringifiedEncryptedPassword;
 	}
 
 	/**

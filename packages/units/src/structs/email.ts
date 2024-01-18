@@ -7,6 +7,8 @@ type Value = [string, string];
 export type StringifiedEmail = Join<Value, "@">;
 type Splitted = Split<StringifiedEmail, "@">;
 
+export type EmailType = Email | StringifiedEmail;
+
 export class Email implements Struct<StringifiedEmail> {
 	public static MAX = 255 as const;
 
@@ -63,7 +65,7 @@ export class Email implements Struct<StringifiedEmail> {
 	 */
 	public domain: string;
 
-	constructor(value: StringifiedEmail) {
+	constructor(value: StringifiedEmail | string) {
 		const [localPart, domain] = Email.schema()
 			.parse(value)
 			.split("@") as Splitted;
